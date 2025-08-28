@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify, render_template
+from flasgger import Swagger
 from analyze import get_llm_response
 
 app = Flask(__name__, template_folder='templates')
+swagger = Swagger(app)
 
 @app.route("/")
 def home():
@@ -10,6 +12,47 @@ def home():
 
 @app.route("/api/v1/analyze", methods=['POST', 'OPTIONS'])
 def analyze():
+    """
+    Analyze an image using Gemini AI
+    ---
+    tags:
+      - Image Analysis
+    consumes:
+      - image/jpeg
+      - image/png
+      - multipart/form-data
+    produces:
+      - application/json
+    parameters:
+      - name: image
+        in: formData
+        type: file
+        required: true
+        description: Image file to analyze
+    responses:
+      200:
+        description: Analysis successful
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+              description: AI analysis result
+        examples:
+          application/json:
+            text: "This image shows a beautiful sunset over a mountain landscape."
+      500:
+        description: Error occurred during analysis
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              description: Error message
+        examples:
+          application/json:
+            error: "Error retrieving response from LLM. Error: Invalid image format"
+    """
     if request.method == 'OPTIONS':
         response = jsonify({'status': 'ok'})
         response.headers['Access-Control-Allow-Origin'] = '*'

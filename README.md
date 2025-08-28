@@ -10,6 +10,7 @@ An AI-powered image analysis web application that uses Google's Gemini 2.0 to de
 - **Drag & Drop Upload**: Intuitive file upload experience with react-dropzone
 - **Real-time Processing**: Instant feedback and loading states during analysis
 - **Secure API**: Environment-based configuration with proper CORS handling
+- **Interactive API Documentation**: Auto-generated Swagger UI for easy API testing and exploration
 
 ## Tech Stack
 
@@ -26,6 +27,7 @@ An AI-powered image analysis web application that uses Google's Gemini 2.0 to de
 - Google GenAI SDK integration
 - PIL (Pillow) for image processing
 - python-dotenv for environment management
+- Flasgger for automated Swagger API documentation
 
 ## Getting Started
 
@@ -68,6 +70,8 @@ An AI-powered image analysis web application that uses Google's Gemini 2.0 to de
    python app.py
    ```
    Backend runs on `http://localhost:3000`
+   
+   **API Documentation available at:** `http://localhost:3000/apidocs/`
 
 2. **Start the React frontend** (in a new terminal)
    ```bash
@@ -85,13 +89,20 @@ An AI-powered image analysis web application that uses Google's Gemini 2.0 to de
 
 ## API Reference
 
+### Interactive Documentation
+Visit `http://localhost:3000/apidocs/` for interactive Swagger UI documentation where you can:
+- View all API endpoints with detailed descriptions
+- Test endpoints directly from the browser
+- Upload images and see live responses
+- View request/response schemas and examples
+
 ### POST `/api/v1/analyze`
 
 Analyzes an uploaded image and returns a humorous roast.
 
 **Request:**
 - Method: POST
-- Content-Type: Binary image data
+- Content-Type: Binary image data or multipart/form-data
 - Body: Raw image file (JPEG, PNG, etc.)
 
 **Response:**
@@ -107,6 +118,13 @@ curl -X POST -H "Content-Type: application/octet-stream" \
      --data-binary @your-image.jpg \
      http://localhost:3000/api/v1/analyze
 ```
+
+**Example using Swagger UI:**
+1. Go to `http://localhost:3000/apidocs/`
+2. Click on the `/api/v1/analyze` endpoint
+3. Click "Try it out"
+4. Upload your image file
+5. Click "Execute" to see the response
 
 ## Security Features
 
