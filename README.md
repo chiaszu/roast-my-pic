@@ -1,51 +1,151 @@
-# Lab 1: Calling, Building, and Securing APIs
-In homework I1 you will use third-party LLM APIs, and in the group project you will develop your own APIs. In this lab you will experiment with both: connecting to one such LLM's (Gemini) API, and providing your own API endpoint. 
-To receive credit for this lab, show your work to the TA during recitation.
+# Roast My Pic
 
-## Deliverables
-- [ ] Retrieve an API Key for Gemini and implement the call to the Gemini API to have the LLM analyze the image in some way. 
-- [ ] Run the API endpoint with the Gemini API call implemented and demonstrate that it works using an example invocation.
-- [ ] Commit your code without committing your credentials. Explain to the TA why hard-coding credentials is a bad idea, and explain any remedial steps you might take should credentials accidentally be leaked. 
+An AI-powered image analysis web application that uses Google's Gemini 2.0 to deliver witty, humorous roasts of uploaded images. Built with a modern React frontend and Flask backend API.
 
-## Getting started
-Clone the starter code from this Git repository: https://github.com/KaushikKoirala/mlip-api-lab
+## Features
 
-The code implements a flask web application that receives API requests to analyze an image and return information about the image. To analyze the image and return information about this image, you should implement a call to the [Gemini API](https://ai.google.dev/gemini-api/docs). We use the Gemini Developer API and its provided [Python libraries](https://pypi.org/project/google-genai/) to abstract the lower level protocol details when making the API calls. 
+- **Smart Image Analysis**: Powered by Google's Gemini 2.0 Flash model for accurate image understanding
+- **Humorous Roasting**: AI generates witty, sarcastic commentary about uploaded images
+- **Modern UI**: Clean, responsive React interface with TypeScript and Tailwind CSS
+- **Drag & Drop Upload**: Intuitive file upload experience with react-dropzone
+- **Real-time Processing**: Instant feedback and loading states during analysis
+- **Secure API**: Environment-based configuration with proper CORS handling
 
-Install the dependencies in the `requirements.txt` file with pip or similar. Replace the API key with your own in [analyze.py](./analyze.py). To set up the flask server, just run `python3 app.py`. The system should try to analyze an example image and report the results when you send a POST request with an attached binary of the image to http://localhost:3000/api/v1/analyze
+## Tech Stack
 
-## Generate a Gemini API Key
-1. Sign into your Google Account and navigate to https://aistudio.google.com/apikey
+**Frontend:**
+- React 19 with TypeScript
+- Tailwind CSS for styling
+- Headless UI components
+- Heroicons and Lucide React icons
+- React Dropzone for file uploads
+- Axios for API communication
 
-2. Generate an API key (it's free)
+**Backend:**
+- Python Flask API server
+- Google GenAI SDK integration
+- PIL (Pillow) for image processing
+- python-dotenv for environment management
 
-3. Update the code in [analyze.py](./analyze.py) with the API key retrieved from Gemini and test it.
+## Getting Started
 
-## Secure your Credentials
-The starter code hardcodes credentials in the code. This is a bad practice. 
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- Google Gemini API Key ([Get one free](https://aistudio.google.com/apikey))
 
-Research and discuss best practices, such as never hard-code credentials, never commit credentials to Git, rotate secrets regularly, encrypt your secrets at rest/in-transit if possible, practice least-access privilege on machines where your credentials are stored as environment variables or within local files.
+### Installation
 
-Rewrite the code to load credentials from a file or an environment variable and commit the code without the credentials to GitHub.
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd gemini-image-analyzer
+   ```
 
-## Implement the call to the Gemini API
-Read the [Gemini API docs](https://ai.google.dev/gemini-api/docs/text-generation) and implement code in the `get_llm_response` function in [analyze.py](./analyze.py) to analyze the image in some way using the Gemini LLM. We will leave how you analyze and extract information about the image up to you but a couple of  options may include: 
+2. **Set up the backend**
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   
+   # Set up environment variables
+   echo "GEMINI_API_KEY=your_api_key_here" > .env
+   ```
 
-1. Image Captioning - Coming up with a caption or some other equivalent form (e.g., haiku, poem, limerick) to describe the image.
-2. Object Detection - Counting the number of objects generally or specifically (e.g., number of trees) in an image
+3. **Set up the frontend**
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-Feel free to get creative! The input images you use to test your API and the call to the LLM are entirely up to you.
+### Running the Application
 
-## Calling your own API
-The starter code comes with a flask server that serves the website at http://localhost:3000/ but also exposes an API endpoint at http://localhost:3000/api/v1/analyze accepting a POST request expecting the raw binary data of the image to analyze in the payload.
+1. **Start the Flask backend**
+   ```bash
+   python app.py
+   ```
+   Backend runs on `http://localhost:3000`
 
-Identify how to call your own API with the image binary as part of the payload using a tool like [curl](https://curl.se/docs/manpage.html#--data-binary) or [Postman](https://learning.postman.com/docs/sending-requests/create-requests/parameters/#binary-data).
+2. **Start the React frontend** (in a new terminal)
+   ```bash
+   cd frontend
+   npm start
+   ```
+   Frontend runs on `http://localhost:3001`
 
-Optionally extend the API or document it with [Swagger](https://swagger.io).
+## Usage
 
-## Additional resources 
-- [Redhat article on API](https://www.redhat.com/en/topics/api/what-are-application-programming-interfaces)
-- [Google GenAI SDK Documentation](https://googleapis.github.io/python-genai/)
-- [API Design Best Practices](https://blog.stoplight.io/crud-api-design?_ga=2.223919515.1813989671.1674077556-1488117179.1674077556)
-- [API Endpoint Best Practices](https://www.telerik.com/blogs/7-tips-building-good-web-api)
-- The file [mlip-api-lab-collection.json](./mlip-api-lab-collection.json) has a sample request to test calls to your API with Postman.
+1. Visit the web application at `http://localhost:3001`
+2. Drag and drop an image or click to upload
+3. Wait for the AI to analyze and roast your image
+4. Enjoy the witty commentary!
+
+## API Reference
+
+### POST `/api/v1/analyze`
+
+Analyzes an uploaded image and returns a humorous roast.
+
+**Request:**
+- Method: POST
+- Content-Type: Binary image data
+- Body: Raw image file (JPEG, PNG, etc.)
+
+**Response:**
+```json
+{
+  "text": "AI-generated roast of the image"
+}
+```
+
+**Example using curl:**
+```bash
+curl -X POST -H "Content-Type: application/octet-stream" \
+     --data-binary @your-image.jpg \
+     http://localhost:3000/api/v1/analyze
+```
+
+## Security Features
+
+- Environment-based API key management
+- No hardcoded credentials in source code
+- CORS properly configured for cross-origin requests
+- Error handling for malformed requests
+
+## Architecture
+
+```
+├── app.py              # Flask API server
+├── analyze.py          # Gemini AI integration
+├── requirements.txt    # Python dependencies
+├── .env               # Environment variables (create this)
+└── frontend/          # React application
+    ├── src/
+    │   ├── components/    # React components
+    │   │   ├── Header.tsx
+    │   │   ├── ImageUpload.tsx
+    │   │   └── ResultsDisplay.tsx
+    │   └── App.tsx       # Main application
+    └── package.json      # Node dependencies
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- Google's Gemini AI for powerful image analysis capabilities
+- React and Flask communities for excellent documentation
+- All the images that bravely volunteered to be roasted
