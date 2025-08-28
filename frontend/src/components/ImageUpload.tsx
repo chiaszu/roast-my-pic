@@ -99,8 +99,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         className={`
           relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300
           ${dragActive 
-            ? 'border-white/50 bg-white/5' 
-            : 'border-white/20 hover:border-white/40'
+            ? 'border-orange-300 bg-orange-50' 
+            : 'border-gray-300 hover:border-orange-400'
           }
           ${isLoading ? 'pointer-events-none opacity-50' : ''}
         `}
@@ -109,13 +109,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          disabled={isLoading}
-        />
+        {!selectedImage && (
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            disabled={isLoading}
+          />
+        )}
         
         {imagePreview ? (
           <div className="space-y-4">
@@ -124,27 +126,30 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               alt="Preview"
               className="max-w-full max-h-64 mx-auto rounded-lg shadow-lg"
             />
-            <div className="space-y-3">
-              <p className="text-white/80 text-sm">{selectedImage?.name}</p>
-              <button
-                onClick={analyzeImage}
-                disabled={isLoading}
-                className="glass px-6 py-2 text-white hover:bg-white/10 transition-all duration-300 rounded-full font-light disabled:opacity-50"
+            <div className="space-y-4">
+              <p className="text-gray-600 text-sm">{selectedImage?.name}</p>
+              <div
+                onClick={isLoading ? undefined : analyzeImage}
+                className={`
+                  bg-gradient-to-r from-orange-400 to-orange-500 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 text-center select-none
+                  ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:from-orange-500 hover:to-orange-600 cursor-pointer'}
+                `}
+                style={{ boxShadow: 'none' }}
               >
                 {isLoading ? 'Analyzing...' : 'Analyze Image'}
-              </button>
+              </div>
             </div>
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full glass flex items-center justify-center">
-              <svg className="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <div className="text-white/80">
+            <div className="text-gray-600">
               <p className="text-lg font-light mb-2">Drop an image here</p>
-              <p className="text-white/60 text-sm">or click to browse</p>
+              <p className="text-gray-500 text-sm">or click to browse</p>
             </div>
           </div>
         )}
