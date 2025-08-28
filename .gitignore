@@ -28,6 +28,11 @@ Thumbs.db
 .coverage
 htmlcov/
 
+# Future plans and personal notes
+future-plans.txt
+notes.txt
+todo.txt
+
 # Distribution / packaging
 .Python
 build/
